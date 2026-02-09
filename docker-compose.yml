@@ -1,0 +1,44 @@
+version: "3.9"
+
+services:
+
+  postgres:
+    image: postgres:16-alpine3.22
+    container_name: url_postgres
+    restart: always
+    environment:
+      POSTGRES_USER: url_user
+      POSTGRES_PASSWORD: url_pass
+      POSTGRES_DB: url_shortener
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  pgbouncer:
+    image: edoburu/pgbouncer
+    container_name: url_pgbouncer
+    restart: always
+    ports:
+      - "6432:6432"
+    environment:
+      DB_USER: url_user
+      DB_PASSWORD: url_pass
+      DB_HOST: postgres
+      DB_NAME: url_shortener
+      POOL_MODE: transaction
+      MAX_CLIENT_CONN: 1000
+      DEFAULT_POOL_SIZE: 50
+    depends_on:
+      - postgres
+
+  redis:
+    image: redis:7-alpine
+    container_name: url_redis
+    restart: unless-stopped
+    ports:
+      - "6379:6379"
+    command: redis-server --appendonly yes
+
+volumes:
+  postgres_data:
