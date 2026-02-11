@@ -127,6 +127,8 @@ Runs using Docker Compose:
 
 ```
 app/
+ ├ main.py
+ │ 
  ├ core/
  │ ├ config.py
  │ ├ database.py
@@ -214,7 +216,7 @@ docker compose down
 Example environment variables:
 
 ```
-DATABASE_URL=postgresql://user:pass@pgbouncer:6432/db
+DATABASE_URL=postgresql://user:pass@postgres:6432/db
 REDIS_URL=redis://redis:6379
 BASE_URL=http://localhost:8000
 MACHINE_ID=1
